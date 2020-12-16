@@ -6,7 +6,7 @@ fetch("http://localhost:3000/api/cameras")
     .then(function (response) {
         return response.json();
     })
-    // Permet d'accéder aux produits
+    // Permet de récupérer la liste des produits
     .then(function(items) {
         displayItems(items);
     });
@@ -46,10 +46,3 @@ function displayItems(products) {
     });
 };
 
-const link = document.querySelector('.btn');
-
-link.addEventListener('click', fenetre);
-
-function fenetre() {
-    window.open('http://product.html', '_blank');
-}
