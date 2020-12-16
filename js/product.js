@@ -1,102 +1,127 @@
-// Initialisation des constantes - Permet de récupérer l'id d'un produit
+// Initialise les constantes - Récupère l'id d'un produit
 const params = new URLSearchParams(document.location.search);
 const id = params.get("id");
 
 const product = document.getElementById("product");
 
-// Appel de l'API
+// Appelle de l'API
 fetch("http://localhost:3000/api/cameras/" + id)
-    // Permet de récupérer une réponse au format json
+    
+// Récupère une réponse au format json
     .then(function (response) {
         return response.json();
     })
-    // Permet de récupérer un produit
+    
+    // Récupère un produit
     .then(function(item) {
         displayItem(item);
     });
 
 // Affiche le contenu de la carte produit dans le code HTMl
 function displayItem(product) {
-    console.log(product);
-    
-    
-    // const productCard = document.createElement('div');
-    // productCard.setAttribute('class', 'p-3 m-3');
 
+    // Crée une div pour l'image du produit 
     const productImgDiv = document.createElement('div');
     productImgDiv.setAttribute('class', 'col col-lg-6 m-0');
-    // productCard.appendChild(productImgDiv);
-
+    
+    // Affiche l'image du produit
     const productImg = document.createElement('img');
     productImg.setAttribute('src', product.imageUrl);
     productImg.setAttribute('class', 'rounded img-fluid');
     productImg.setAttribute('style', 'max-width: 400px');
     productImgDiv.appendChild(productImg);
 
+    // Crée une div pour la description du produit 
     const productDescDiv = document.createElement('div');
     productDescDiv.setAttribute('class', 'col-12 col-lg-6 m-0');
-    // productCard.appendChild(productDescDiv);
 
+    // Affiche le nom du produit    
     const productName = document.createElement('h3');
     productName.setAttribute('class', 'name card-title pt-2');
     productName.innerHTML = product.name;
     productDescDiv.appendChild(productName);
 
+    // Affiche la description du produit
     const productDescription = document.createElement('p');
     productDescription.innerHTML = product.description;
     productDescDiv.appendChild(productDescription);
     
+    // Affiche les lentilles à choisir pour un produit
     const productLenses = document.createElement('label');
     productLenses.innerHTML = 'Options : ';
     productDescDiv.appendChild(productLenses); 
 
-    const productLensesSelect = document.createElement('select'); // Permet de créer un champ de sélection
+    // Crée un champ de sélection pour choisir les options 
+    const productLensesSelect = document.createElement('select'); 
     productLenses.appendChild(productLensesSelect); 
 
-    const productLensesOption = document.createElement('option'); // Permet de créer des options
+    // Affiche l'option par défaut pour le choix de la lentille
+    const productLensesOption = document.createElement('option'); 
     productLensesOption.innerHTML = 'Veuillez choisir une lentille';
     productLensesSelect.appendChild(productLensesOption);
 
+    // Affiche les options pour le choix de la lentille
     for (let i = 0; i < product.lenses.length; i++ ){
         const optionLenses = document.createElement('option');
         optionLenses.setAttribute('value', product.lenses[i]);
         optionLenses.innerHTML = product.lenses[i];
         productLensesSelect.appendChild(optionLenses);
     }
-
+    
+    // Affiche la description du produit
     const productPrice = document.createElement('p');
     productPrice.setAttribute('class', 'price pt-4');
     productPrice.innerHTML = product.price /100 + ' €';
     productDescDiv.appendChild(productPrice);          
 
+    // Insère les div "productImgDiv" et "productDescDiv" dans la div nommée "product"
     document.getElementById('product').appendChild(productImgDiv);
     document.getElementById('product').appendChild(productDescDiv);
 
-    // const btn = document.createElement("button"); 
-    // btn.setAttribute('class', 'btn bg-pink p-2 mt-3 btn-outline-dark');
-    // btn.innerHTML = "Ajouter au panier  ";
-    // btn.innerHTML += (`<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cart-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    // <path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-    // <path fill-rule="evenodd" d="M8.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 .5-.5z"/>
-    // </svg>`);
-    // productDescDiv.appendChild(btn);
+    // Récupère le bouton "Ajouter au panier" créé dans product.html    
+    const btn = document.querySelector('#addToCart'); 
 
-    // Permet de récupérer le bouton créé dans product.html
-    const btn = document.querySelector('#addToCart')
-
-    
-
-    const article = [
+    // Regroupe les valeurs qui seront stockées dans le local storage
+    const products = [
         product._id,
-        product.name,
-        product.price,
         product.imageUrl,
+        product.name,
+        product.lenses,
+        product.price,
     ];
-    // Permet de stocker les données dans le local storage
+
+    // Stocke les données dans le local storage
+    // btn.addEventListener('click', () => { 
+    //     localStorage.setItem(product.name, JSON.stringify(products));
+    //     console.log('added to cart');
+    // });
+
+
     btn.addEventListener('click', () => {
-        localStorage.setItem(product.name, JSON.stringify(article));
-        // alert('Le produit a été ajouté au panier !');
-    });
+        cartProducts();
+    })
+    
+    function cartProducts() {
+        let productNumbers = localStorage.setItem(product.name, JSON.stringify(products));
+        
+
+        productNumbers = parseInt(productNumbers);
+        
+        // Ajoute un produit à celui qui est déjà dans le panier, sinon ajoute simplement un produit au panier
+        if(productNumbers) {
+            localStorage.setItem(product.name, productNumbers + 1);
+        } else {
+            localStorage.setItem(product.name, 1);
+        }
+        
+        
+    }
+
+
+
+
+
+
 };
 
 
