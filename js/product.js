@@ -4,7 +4,7 @@ const id = params.get("id");
 
 const product = document.getElementById("product");
 
-// Appelle de l'API
+// Appelle l'API
 fetch("http://localhost:3000/api/cameras/" + id)
     
 // Récupère une réponse au format json
@@ -67,7 +67,7 @@ function displayItem(product) {
         optionLenses.innerHTML = product.lenses[i];
         productLensesSelect.appendChild(optionLenses);
     }
-    
+  
     // Affiche la description du produit
     const productPrice = document.createElement('p');
     productPrice.setAttribute('class', 'price pt-4');
@@ -78,53 +78,62 @@ function displayItem(product) {
     document.getElementById('product').appendChild(productImgDiv);
     document.getElementById('product').appendChild(productDescDiv);
 
+    
+
     // Récupère le bouton "Ajouter au panier" créé dans product.html    
     const btn = document.querySelector('#addToCart'); 
 
-    // Regroupe les valeurs qui seront stockées dans le local storage
-    const products = [
-        product._id,
-        product.imageUrl,
-        product.name,
-        product.lenses,
-        product.price,
-    ];
-
-    // Stocke les données dans le local storage
-    // btn.addEventListener('click', () => { 
-    //     localStorage.setItem(product.name, JSON.stringify(products));
-    //     console.log('added to cart');
-    // });
-
-
     btn.addEventListener('click', () => {
-        cartProducts();
-    })
-    
-    function cartProducts() {
-        let productNumbers = localStorage.setItem(product.name, JSON.stringify(products));
-        
+            addToCart(product)
+    });
+}
 
-        productNumbers = parseInt(productNumbers);
-        
-        // Ajoute un produit à celui qui est déjà dans le panier, sinon ajoute simplement un produit au panier
-        if(productNumbers) {
-            localStorage.setItem(product.name, productNumbers + 1);
-        } else {
-            localStorage.setItem(product.name, 1);
+// Ajoute les articles au panier
+function addToCart(product) {
+
+    // Initialise le tableau produits
+    let products = [];
+
+    // Si le panier ne contient aucun élément, ajout du premier produit, sinon ajoute un nouveau produit à ceux du panier
+    if(!localStorage.getItem('basket')) {
+        products.push({
+            // id: product._id,
+            // quantity: 1,
+
+            id: product._id,
+            image: product.imageUrl,
+            name: product.name,
+            price: product.price,
+            quantity: 1,
+        }); 
+
+        // Met à jour le panier
+        localStorage.setItem('basket', JSON.stringify(products)); 
+    } else {
+        products =  JSON.parse(localStorage.getItem('basket'))
+        let exist = false;
+
+        // Vérifie pour chaque élément du tableau produits que l'élément existe déjà, si c'est le cas ajout de 1 à la quantité du produit 
+        products.forEach(element => {
+            if(element.id == product._id) {
+                element.quantity ++;
+                exist = true;
+            }
+        }); 
+
+        // Ajoute un produit différent au panier
+        if(!exist) {
+            products.push({
+                // id: product._id,
+                // quantity: 1,
+
+                id: product._id,
+                image: product.imageUrl,
+                name: product.name,
+                price: product.price,
+                quantity: 1,
+            }); 
         }
-        
-        
-    }
-
-
-
-
-
-
-};
-
-
-
-
-
+        localStorage.setItem('basket', JSON.stringify(products));
+    }              
+}
