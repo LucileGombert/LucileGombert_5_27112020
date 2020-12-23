@@ -22,18 +22,18 @@ function displayItem(product) {
 
     // Crée une div pour l'image du produit 
     const productImgDiv = document.createElement('div');
-    productImgDiv.setAttribute('class', 'col col-lg-6 m-0');
+    productImgDiv.setAttribute('class', 'card border-0 col-sm-8 col-lg-6 m-0 productImgDiv');
     
     // Affiche l'image du produit
     const productImg = document.createElement('img');
     productImg.setAttribute('src', product.imageUrl);
-    productImg.setAttribute('class', 'rounded img-fluid');
+    productImg.setAttribute('class', 'rounded img-fluid productImg');
     productImg.setAttribute('style', 'max-width: 400px');
     productImgDiv.appendChild(productImg);
 
     // Crée une div pour la description du produit 
     const productDescDiv = document.createElement('div');
-    productDescDiv.setAttribute('class', 'col-12 col-lg-6 m-0');
+    productDescDiv.setAttribute('class', 'col-sm-8 col-lg-6 m-0 pt-4');
 
     // Affiche le nom du produit    
     const productName = document.createElement('h3');
@@ -71,7 +71,7 @@ function displayItem(product) {
     // Affiche la description du produit
     const productPrice = document.createElement('p');
     productPrice.setAttribute('class', 'price pt-4');
-    productPrice.innerHTML = product.price /100 + ' €';
+    productPrice.innerHTML = product.price /100 + ',00 €';
     productDescDiv.appendChild(productPrice);          
 
     // Insère les div "productImgDiv" et "productDescDiv" dans la div nommée "product"
@@ -84,7 +84,8 @@ function displayItem(product) {
     const btn = document.querySelector('#addToCart'); 
 
     btn.addEventListener('click', () => {
-            addToCart(product)
+        addToCart(product)
+        totalCost(product);
     });
 }
 
@@ -135,5 +136,18 @@ function addToCart(product) {
             }); 
         }
         localStorage.setItem('basket', JSON.stringify(products));
-    }              
+    }        
+}
+
+// Calcule le prix total du panier
+function totalCost(product) {
+    let basketCost = localStorage.getItem('totalCost');
+    
+    if(basketCost != null) {
+        basketCost = parseInt(basketCost);
+        localStorage.setItem('totalCost', basketCost + product.price);
+        
+    } else {
+        localStorage.setItem('totalCost', product.price);
+    }
 }

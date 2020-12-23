@@ -2,10 +2,12 @@
 // let basket = document.getElementById('cartContainer');
 let affichagePanier = document.getElementById('cartContainer');
 
-let basketContent =  JSON.parse(localStorage.getItem('basket'));
+let basket =  JSON.parse(localStorage.getItem('basket'));
+let totalCost = JSON.parse(localStorage.getItem('totalCost'));
+
 
 // Si le panier est vide, affiche 'Votre panier est vide !', sinon affiche autre chose
-if (basketContent == null ) {
+if (basket == null ) {
     const basketTitle = document.getElementById('basketTitle');
     basketTitle.innerHTML = 'Votre panier est vide !';
 
@@ -20,65 +22,45 @@ if (basketContent == null ) {
     div1.nextElementSibling.remove();  
 }
 
-if(basketContent.length > 0) {
-    for(let product of basketContent) {
-        
-        // affichagePanier.innerHTML += `
-        //     <div class="row m-2 ligne-product pt-2 border-top border-dark">
-        //         <div class="col-lg-3">
-        //             <img alt="${product.name}" class="img-fluid" src="${product.image}">
-        //         </div>
-
-        //         <div class="col-lg-5">
-        //             <a href="product.html?id=${product.id}"><h2 class="mb-2">${product.name}</h2></a>
-        //             <p class="prixproductPanier" id='${product.name}total'><strong>Prix unitaire : <span class='chiffre-prix'>${product.price.toFixed(2)} €</span></strong></p>   
-
-        //             <p><strong>Quantité</strong> : 
-        //             <input class=" col-lg-2 quantite" id="${product.id}" type="number" value="${product.quantity}">
-        //         </div>
-                
-        //          <div class="col-lg-2 col-6 mt-2"
-        //          <p class="prixproductQuantite" id='${product.name}total'><strong>Prix total : <span class='chiffre-prix-total'>${product.total}</span></strong></p>   
-        //       </div>
-
-        //         <div class="col-lg-2 col-6 mt-2">
-        //             <i class="fa fa-trash"></i>  
-        //          </div>
-        //     </div>
-        // `; 
-         
+if(basket.length > 0) {
+    for(let product of basket) {
+                 
         const basketItem = document.createElement('div');
         basketItem.setAttribute('class', 'row p-3 align-items-center border-bottom');
         cartContainer.appendChild(basketItem);
 
         const basketProductImage = document.createElement('img');
         basketProductImage.setAttribute('src', product.image);
-        basketProductImage.setAttribute('class', 'img-fluid col-2');
+        basketProductImage.setAttribute('class', 'img-fluid col-lg-1 col-xl-2');
         basketProductImage.setAttribute('style', 'max-width: 200px');
         basketItem.appendChild(basketProductImage);
 
         const basketProductName = document.createElement('p');
-        basketProductName.setAttribute('class', 'col-2');
+        basketProductName.setAttribute('class', 'col-lg-2');
         basketProductName.innerHTML = product.name;
         basketItem.appendChild(basketProductName);
 
         const basketProductPrice = document.createElement('p');
-        basketProductPrice.setAttribute('class', 'col-2 text-center');
-        basketProductPrice.innerHTML =  product.price /100 + ' €';
+        basketProductPrice.setAttribute('class', 'col-lg-2  text-center');
+        basketProductPrice.innerHTML =  product.price /100 + ',00 €';
         basketItem.appendChild(basketProductPrice);
 
         const basketProductQuantity = document.createElement('div');
-        basketProductQuantity.setAttribute('class', 'number col-3 text-center');
+        basketProductQuantity.setAttribute('class', 'number col-md-2 col-lg-3 text-center');
         basketProductQuantity.innerHTML += (`<span class="minus btn bg-pink btn-outline-dark">-</span>
-                                            <input class="p-2 col-3" type="text" value="1"/>
+                                            <input class="quantity p-2 col-3" type="text" value="${product.quantity}"/>
                                             <span class="plus btn bg-pink btn-outline-dark">+</span>`)
         basketItem.appendChild(basketProductQuantity);
 
+        let totalPrice = document.getElementsByClassName('totalPrice');
+        totalPrice = product.price/100 * product.quantity;
+
         const basketProducttotalPrice = document.createElement('p');
-        basketProducttotalPrice.setAttribute('class', 'col-1 text-center');
-        basketProducttotalPrice.innerHTML = "?";
+        basketProducttotalPrice.setAttribute('class', 'totalPrice col-lg-2 text-center');
+        basketProducttotalPrice.innerHTML = totalPrice + ',00 €';
         basketItem.appendChild(basketProducttotalPrice);
 
+        // Bouton de suppression d'un produit du panier
         const divRemoveButton = document.createElement('div');
         basketItem.appendChild(divRemoveButton);
 
@@ -90,10 +72,19 @@ if(basketContent.length > 0) {
         </svg>`);
         divRemoveButton.appendChild(removeButton);
 
+        removeButton.addEventListener('click',removeProduct);
+        function removeProduct(event) {
+            let removeProduct = event.target
+            removeProduct.parentElement.parentElement.remove()
+        }
+        localStorage.setItem("basket", JSON.stringify(basket));
+
+        const totalBasketPrice = document.getElementById('totalBasketPrice');
+        totalBasketPrice.innerHTML = totalCost /100 + ',00 €';
     }
 }
 
-
+// Formulaire de commande
 const submit = document.getElementById('orderButton');
 
 submit.addEventListener('click',formValidation);
@@ -164,3 +155,4 @@ $(document).ready(function() {
         return false;
     });
 });
+

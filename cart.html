@@ -41,7 +41,7 @@
 
             <section class="container">
                 <div id='div1' class="text-center p-3 m-3">
-                    <h1 id="basketTitle"></h1>
+                    <h1 id="basketTitle" class="h3"></h1>
                     <div>
                         <img src="images/logoCartWhiteS.png" alt="logo panier">
                     </div>
@@ -51,16 +51,20 @@
                 </div>
             </section>
 
-            <section class="container border mt-4" id="basketContent">
+            <section class="container border pt-4" id="basketContent">
                 <div class="row text-center p-3 border-bottom">
                     <div class="col-4 product">Produit</div>
                     <div class="col-2">Prix</div>
                     <div class="col-3">Quantité</div>
-                    <div class="col-2" id="totalCost">Prix total</div>
+                    <div class="col-2" id="totalCost">Total</div>
                 </div>
 
                 <div id="cartContainer">
 
+                </div>
+               
+                <div class="d-flex flex-row-reverse bd-highlight">
+                    <p class="border p-3 m-3"><strong>Prix total : <span id="totalBasketPrice"></span></strong></p>
                 </div>
             </section>
 
@@ -109,7 +113,6 @@
                     </div>
                     </form>
             </section>
-                
             
             <footer class="footer">
                 <div class="container-fluid bg-pink">
@@ -119,11 +122,11 @@
                         <a class="col text-dark" href="https://www.instagram.com/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     </div>
 
-                    <div class="text-center p-4">
-                        <a class="col text-dark" href="#">A propos</a>
-                        <a class="col text-dark" href="#">Mentions légales</a>
-                        <a class="col text-dark" href="#">Conditions générales de vente</a>
-                        <a class="col text-dark" href="mailto:contact@orinoco.com">Contact</a>
+                    <div class="row text-center p-4">
+                        <a class="col-sm-12 col-xl text-dark" href="#">A propos</a>
+                        <a class="col-sm-12 col-xl text-dark" href="#">Mentions légales</a>
+                        <a class="col-sm-12 col-xl text-dark" href="#">Conditions générales de vente</a>
+                        <a class="col-sm-12 col-xl text-dark" href="mailto:contact@orinoco.com">Contact</a>
                     </div>
                 </div>
             </footer>
@@ -134,3 +137,4 @@
     </html>
 
 
+    

@@ -30,4 +30,16 @@ body {
   .img-fluid {
     max-width: 200px;
   }
+  #product {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 350px) { 
+  .img-fluid {
+    max-height: 250px;
+  }
+  .productImg {
+    max-width: 250px;
+  }
 }
