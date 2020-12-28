@@ -1,11 +1,11 @@
 // Initialise les constantes - Récupère l'id d'un produit
 const params = new URLSearchParams(document.location.search);
-const id = params.get("id");
+const id = params.get('id');
 
-const product = document.getElementById("product");
+const product = document.getElementById('product');
 
 // Appelle l'API
-fetch("http://localhost:3000/api/cameras/" + id)
+fetch('http://localhost:3000/api/cameras/' + id)
     
 // Récupère une réponse au format json
     .then(function (response) {
@@ -98,9 +98,6 @@ function addToCart(product) {
     // Si le panier ne contient aucun élément, ajout du premier produit, sinon ajoute un nouveau produit à ceux du panier
     if(!localStorage.getItem('basket')) {
         products.push({
-            // id: product._id,
-            // quantity: 1,
-
             id: product._id,
             image: product.imageUrl,
             name: product.name,
@@ -125,9 +122,6 @@ function addToCart(product) {
         // Ajoute un produit différent au panier
         if(!exist) {
             products.push({
-                // id: product._id,
-                // quantity: 1,
-
                 id: product._id,
                 image: product.imageUrl,
                 name: product.name,

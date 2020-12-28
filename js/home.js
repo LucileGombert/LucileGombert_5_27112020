@@ -1,11 +1,11 @@
 // Initialise la constante - Positionne dans la div nommée "products"
-const products = document.getElementById("products");
+const products = document.getElementById('products');
 
 // Appelle l'API
-fetch("http://localhost:3000/api/cameras")
+fetch('http://localhost:3000/api/cameras')
     
 // Récupère une réponse au format json
-    .then(function (response) {
+    .then(function(response) {
         return response.json();
     })
     
@@ -39,7 +39,7 @@ function displayItems(products) {
         // Affiche le prix des produits
         const productPrice = document.createElement('p');
         productPrice.setAttribute('class', 'price');
-        productPrice.innerHTML = product.price.toFixed(2) /100 + ' €';
+        productPrice.innerHTML = product.price.toFixed(2) /100 + ',00 €';
         productCard.appendChild(productPrice);          
 
         // Crée le bouton "Voir plus" sur chaque carte produit

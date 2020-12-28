@@ -70,24 +70,24 @@
 
             <section class="container pt-4 mt-4" id="formContent">
                 <h2 class="h5 text-center">Veuillez compléter le formulaire afin de finaliser votre commande</h2>
-                <form class="row g-3" id="form" method="POST" action="server.js">
+                <form class="row g-3" id="form">
                     <div class="row g-3 border m-2">
                         <div class="col-md-6 p-3">
                             <label for="lastName" class="form-label">Nom</label>
-                            <input type="text" class="form-control" name="lastName" id="lastName" required maxlength="20">
+                            <input type="text" class="form-control" name="lastName" id="lastName" required  maxlength="20">
                             <span id="lastNameMissing"></span>
                         </div>
 
                         <div class="col-md-6 p-3">
-                            <label for="fisrtName" class="form-label">Prénom</label>
-                            <input type="text" class="form-control" name="fisrtName" id="fisrtName" required maxlength="20">
+                            <label for="firstName" class="form-label">Prénom</label>
+                            <input type="text" class="form-control" name="firstName" id="firstName" required maxlength="20">
                             <span id="firstNameMissing"></span>
                         </div>
                         
                         <div class="col-md-6 p-3">
                             <label for="mail" class="form-label">Email</label>
                             <input type="email" class="form-control" name="mail" id="mail" required>
-                            <span id="maildMissing"></span>
+                            <span id="mailMissing"></span>
                         </div>
 
                         <div class="col-12 p-3">
