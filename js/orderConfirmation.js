@@ -1,9 +1,7 @@
-let paramsConfirmation = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(document.location.search);
 
+let priceOrder = document.getElementById("priceOrder");
+priceOrder.textContent = params.get('price');
 
-let prixConfirmation = document.getElementById("prixcommande");
-let idConfirmation = document.getElementById("idcommande");
-
-
-prixConfirmation.textContent = paramsConfirmation.get('prix');
-idConfirmation.textContent = paramsConfirmation.get('id');
+let idOrder = document.getElementById("idOrder");
+idOrder.textContent = params.get('id');

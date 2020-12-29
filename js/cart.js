@@ -7,7 +7,7 @@ let totalCost = JSON.parse(localStorage.getItem('totalCost'));
 
 
 // Si le panier est vide, affiche 'Votre panier est vide !', sinon affiche 'Votre panier'
-if (basket == null ) {
+if (basket == null || basket.length == 0) {
     const basketTitle = document.getElementById('basketTitle');
     basketTitle.innerHTML = 'Votre panier est vide !';
 
@@ -23,7 +23,7 @@ if (basket == null ) {
 }
 
 // Si le panier contient des produits, il les affiche
-if(basket.length > 0) {
+if(basket.length > 0) { 
     for(let product of basket) {
                  
         const basketItem = document.createElement('div');
@@ -47,8 +47,11 @@ if(basket.length > 0) {
         basketItem.appendChild(basketProductPrice);
 
         const basketProductQuantity = document.createElement('div');
-        basketProductQuantity.setAttribute('class', 'number col-md-2 col-lg-3 text-center');
-        basketProductQuantity.innerHTML = product.quantity;  
+        basketProductQuantity.setAttribute('class', 'quantity col-md-2 col-lg-3 text-center');
+        // basketProductQuantity.innerHTML = product.quantity;  
+        basketProductQuantity.innerHTML += (`<button class="minus disabled btn bg-pink btn-outline-dark">-</button>
+                                            <input id="quantity" class=" border p-2 col-3" type="text" value="${product.quantity}"</input>
+                                            <button class="plus btn bg-pink btn-outline-dark">+</button>`)
         basketItem.appendChild(basketProductQuantity);
 
         let totalPrice = document.getElementsByClassName('totalPrice');
@@ -59,10 +62,73 @@ if(basket.length > 0) {
         basketProducttotalPrice.innerHTML = totalPrice + ',00 €';
         basketItem.appendChild(basketProducttotalPrice);
 
+        // Bouton de suppression d'un produit du panier
+        const divRemoveButton = document.createElement('div');
+        basketItem.appendChild(divRemoveButton);
+
+        const removeButton = document.createElement("button"); 
+        removeButton.setAttribute('class', 'btn bg-pink btn-outline-dark removeButton');
+        removeButton.setAttribute('data-item', product.id);
+        removeButton.innerHTML += (`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+        </svg>`);
+        divRemoveButton.appendChild(removeButton);
+
+        
+        
+        // removeButton.addEventListener('click', function() {
+        //     let id = this.getAttribute("data-item");
+        //     console.log("id poubelle", id);
+        // });   
+
         const totalBasketPrice = document.getElementById('totalBasketPrice');
         totalBasketPrice.innerHTML = totalCost /100 + ',00 €';
+
+        
     }
 }
+
+// Modifie la quantité de produit 
+let valueCount;
+
+document.querySelector('.plus').addEventListener('click', function() {
+    valueCount = document.getElementById('quantity').value;
+    valueCount++;
+    document.getElementById('quantity').value = valueCount;
+
+    if(valueCount > 1) {
+        document.querySelector('.minus').removeAttribute('disabled');
+        document.querySelector('.minus').classList.remove('disabled');
+    }
+    localStorage.setItem("basket", JSON.stringify(basket));
+})
+
+document.querySelector('.minus').addEventListener('click', function() {
+    valueCount = document.getElementById('quantity').value;
+    valueCount--;
+    document.getElementById('quantity').value = valueCount;
+
+    if(valueCount == 1) {
+        document.querySelector('.minus').setAttribute('disabled','disabled');
+    }
+})
+
+// Supprime un produit du panier
+let removeButton = document.querySelector('.removeButton');
+removeButton.addEventListener('click', function() {
+    let id = this.getAttribute("data-item");
+    console.log("id poubelle", id);
+
+    for (let i=0; i !=basket.length; i++){
+        if (basket[i].id === id){
+            basket.splice(i,1);
+            break;
+        }
+    }
+    localStorage.setItem("basket", JSON.stringify(basket));
+    window.location.href = "cart.html";
+}); 
 
 // Formulaire de commande
 const submitForm = document.getElementById('orderButton');
@@ -70,10 +136,9 @@ const submitForm = document.getElementById('orderButton');
 submitForm.addEventListener('click',formValidation);
 
 function formValidation(e) {
-    // e.preventDefault();
     const lastName = document.getElementById('lastName');
     const lastNameMissing = document.getElementById('lastNameMissing');
-    const lastNameValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/;
+    const lastNameValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/i;
 
     if (lastName.validity.valueMissing) {
         e.preventDefault();
@@ -89,7 +154,7 @@ function formValidation(e) {
 
     const firstName = document.getElementById('firstName');
     const firstNameMissing = document.getElementById('firstNameMissing');
-    const firstNameValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/;
+    const firstNameValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/i;
 
     if (firstName.validity.valueMissing) {
         e.preventDefault();
@@ -121,7 +186,7 @@ function formValidation(e) {
 
     const address = document.getElementById('address');
     const addressMissing = document.getElementById('addressMissing');
-    const adressValidation = /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)*/;
+    const adressValidation = /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)*/i;
 
     if (address.validity.valueMissing) {
         e.preventDefault();
@@ -153,7 +218,7 @@ function formValidation(e) {
 
     const city = document.getElementById('city');
     const cityMissing = document.getElementById('cityMissing');
-    const cityValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/;
+    const cityValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/i;
 
     if (city.validity.valueMissing) {
         e.preventDefault();
@@ -169,70 +234,49 @@ function formValidation(e) {
 }
 
 // Validation de la commande
-
-// Tableau de produits envoyé au serveur contenant l'id des produits à commandés
-let products = [];
-for (let i=0; i < basket.length; i++) {
-    products.push(basket[i].id)
-}
-  
-let orderItems = {
-    contact: {},
-    products: products,
-}
-
 let orderValidation = document.getElementById("formContent");
 
 orderValidation.addEventListener("submit", function (e){
     e.preventDefault();
 
-    //Récupération des champs     
+    // Récupère les champs du formulaire     
     let firstNameForm = document.getElementById("firstName").value;
     let lastNameForm = document.getElementById("lastName").value;
     let addressForm = document.getElementById("address").value; 
     let cityForm = document.getElementById("city").value;
     let mailForm = document.getElementById("mail").value;
 
-    //Création de l'objet formulaireObjet
-    orderItems.contact = {
-        firstName: firstNameForm,
-        lastName: lastNameForm,  
-        address: addressForm,
-        city: cityForm,
-        email: mailForm
-    }    
+    // Tableau de produits envoyé au serveur contenant l'id des produits à commandés
+    let products = [];
+    for (let i=0; i < basket.length; i++) {
+        products.push(basket[i].id)
+    }
 
-    //Envoi des données récupérées
-    const optionsFetch = {
+    // Contient l'objet contact et le tableau produits envoyés au serveur
+    let orderContent = {
+        contact: {
+            firstName: firstNameForm,
+            lastName: lastNameForm,  
+            address: addressForm,
+            city: cityForm,
+            email: mailForm
+        },
+        products: products,
+    }
+         
+    fetch("http://localhost:3000/api/cameras/order", {
+        method: 'POST',
         headers:{
             'Content-Type': 'application/json',
         },
-        method:"POST",
-        body: JSON.stringify(orderItems),         
-    }   
-    
-    fetch('http://localhost:3000/api/cameras/order', optionsFetch)
+        body: JSON.stringify(orderContent),
+    })
         .then(function(response) {
             return response.json();
         })
-        .then(function(number) {
-            window.location = `orderConfirmation.html?id=${number.orderId}&prix=${totalCost /100 + ',00 €'}`
+        .then(function(result) {
+            window.location.href = `orderConfirmation.html?id=${result.orderId}&price=${totalCost /100 + ',00 €'}`
         });
+        
     localStorage.clear() 
 })
-
-
-/**
- *
- * Expects request to contain:
- * contact: {
- *   firstName: string,
- *   lastName: string,
- *   address: string,
- *   city: string,
- *   email: string
- * }
- * products: [string] <-- array of product _id
- *
- */
-
