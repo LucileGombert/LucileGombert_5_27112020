@@ -78,8 +78,6 @@ function displayItem(product) {
     document.getElementById('product').appendChild(productImgDiv);
     document.getElementById('product').appendChild(productDescDiv);
 
-    
-
     // Récupère le bouton "Ajouter au panier" créé dans product.html    
     const btn = document.querySelector('#addToCart'); 
 
@@ -144,4 +142,5 @@ function totalCost(product) {
     } else {
         localStorage.setItem('totalCost', product.price);
     }
+    console.log(basketCost);
 }

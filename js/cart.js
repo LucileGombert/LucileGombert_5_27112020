@@ -31,28 +31,32 @@ if(basket.length > 0) {
         basketItem.setAttribute('class', 'row p-3 align-items-center border-bottom');
         cartContainer.appendChild(basketItem);
 
+        // Crée la div qui contient l'image et le nom du produit
+        const basketProductDiv = document.createElement('div');
+        basketProductDiv.setAttribute('class', 'col-12 col-md-4 text-center');
+        basketItem.appendChild(basketProductDiv);
+
         // Affiche l'image du produit 
         const basketProductImage = document.createElement('img');
         basketProductImage.setAttribute('src', product.image);
-        basketProductImage.setAttribute('class', 'img-fluid col-lg-1 col-xl-2');
+        basketProductImage.setAttribute('class', 'img-fluid');
         basketProductImage.setAttribute('style', 'max-width: 200px');
-        basketItem.appendChild(basketProductImage);
+        basketProductDiv.appendChild(basketProductImage);
         
         // Affiche le nom du produit 
         const basketProductName = document.createElement('p');
-        basketProductName.setAttribute('class', 'col-lg-2');
         basketProductName.innerHTML = product.name;
-        basketItem.appendChild(basketProductName);
+        basketProductDiv.appendChild(basketProductName);
 
         // Affiche le prix du produit 
         const basketProductPrice = document.createElement('p');
-        basketProductPrice.setAttribute('class', 'col-lg-2  text-center');
-        basketProductPrice.innerHTML =  product.price /100 + ',00 €';
+        basketProductPrice.setAttribute('class', 'price col-12 col-md-2 m-0 text-center');
+        basketProductPrice.innerHTML = product.price /100 + ',00 €';
         basketItem.appendChild(basketProductPrice);
 
         // Affiche la quantité 
         const basketProductQuantity = document.createElement('div');
-        basketProductQuantity.setAttribute('class', 'quantity col-md-2 col-lg-3 text-center');
+        basketProductQuantity.setAttribute('class', 'quantity col-6 col-md-3 text-center');
         basketProductQuantity.innerHTML += (`<button class="minus disabled btn bg-pink btn-outline-dark" data-item="${product.id}">-</button>
                                             <input class=" border p-2 col-3" type="text" value="${product.quantity}"</input>
                                             <button class="plus btn bg-pink btn-outline-dark" data-item="${product.id}">+</button>`)
@@ -60,16 +64,17 @@ if(basket.length > 0) {
 
         // Affiche le prix total par produit 
         const basketProductTotalPrice = document.createElement('p');
-        basketProductTotalPrice.setAttribute('class', 'totalPrice col-lg-2 text-center');
+        basketProductTotalPrice.setAttribute('class', 'totalPrice col-6 col-md-2 col-lg-2 text-center m-0');
         basketProductTotalPrice.innerHTML = product.price/100 * product.quantity + ',00 €';
         basketItem.appendChild(basketProductTotalPrice);
 
         // Affiche le bouton poubelle pour la suppression d'un produit
         const divRemoveButton = document.createElement('div');
+        divRemoveButton.setAttribute('class', 'col-12 text-center');
         basketItem.appendChild(divRemoveButton);
 
         const removeButton = document.createElement("button"); 
-        removeButton.setAttribute('class', 'btn bg-pink btn-outline-dark removeButton');
+        removeButton.setAttribute('class', 'removeButton btn bg-pink btn-outline-dark pl-4 pr-4');
         removeButton.setAttribute('data-item', product.id);
         removeButton.innerHTML += (`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -82,82 +87,89 @@ if(basket.length > 0) {
         totalBasketPrice.innerHTML = totalCost /100 + ',00 €';
 
 
+
         // Modifie la quantité d'un produit (-)
-        let minusButton = document.querySelector('.minus');
-        minusButton.addEventListener('click', function() {
-            let id = this.getAttribute("data-item");
+        let minusButton = document.getElementsByClassName('minus');
+        for(let x=0; x < minusButton.length; x++ ) {
+            minusButton[x].addEventListener('click', function() {
+                let id = this.getAttribute("data-item");
 
-            // Soustrait 1 à la quantité d'un produit si l'attribut id de la poubelle est identique à celui du produit
-            for (let i=0; i !=basket.length; i++){
-                if (basket[i].id === id){
-                    product.quantity--;
-                    break;
+                // Soustrait 1 à la quantité d'un produit si l'attribut "id" du bouton "-" est identique à celui du produit
+                for (let i=0; i < basket.length; i++){
+                    if (basket[i].id === id){
+                        product.quantity--;
+                    }
                 }
+                // Met à jour la quantité dans le local storage
+                localStorage.setItem("basket", JSON.stringify(basket));
+                // Met à jour le prix total du panier
+                localStorage.setItem('totalCost', basketCost - product.price);
+                // Recharge la page
+                window.location.reload();
+                
+            });
+            // Empêche de cliquer sur - lorsque la quantité du produit est de 1
+            if(product.quantity == 1) {
+                document.querySelector('.minus').setAttribute('disabled','disabled');
             }
-            // Met à jour la quantité dans le local storage
-            localStorage.setItem("basket", JSON.stringify(basket));
-            // Met à jour le prix total du panier
-            localStorage.setItem('totalCost', basketCost - product.price);
-            // Recharge la page
-            window.location.reload();
-        });
-        // Empêche de cliquer sur - lorsque la quantité du produit est de 1
-        if(product.quantity == 1) {
-            document.querySelector('.minus').setAttribute('disabled','disabled');
         }
-
 
         // Modifie la quantité d'un produit (+)
-        let plusButton = document.querySelector('.plus');
-        plusButton.addEventListener('click', function() {
-            let id = this.getAttribute("data-item");
+        let plusButton = document.getElementsByClassName('plus');
+        for(let x=0; x < plusButton.length; x++ ) {
+            plusButton[x].addEventListener('click', function() {
+                let id = this.getAttribute("data-item");
 
-            // Ajoute 1 à la quantité d'un produit si l'attribut "id" de la poubelle est identique à celui du produit
-            for (let i=0; i !=basket.length; i++){
-                if (basket[i].id === id){
-                    product.quantity++;
-                    break;
+                // Ajoute 1 à la quantité d'un produit si l'attribut "id" du bouton "+" est identique à celui du produit
+                for (let i=0; i < basket.length; i++){
+                    if (basket[i].id === id){
+                        product.quantity++;
+                    }
                 }
+                // Met à jour la quantité dans le local storage
+                localStorage.setItem("basket", JSON.stringify(basket));
+                // Met à jour le prix total du panier
+                localStorage.setItem('totalCost', basketCost + product.price);
+                // Recharge la page
+                window.location.reload();
+                
+            }); 
+            // Supprime l'attribut et la classe "disabled" lorsque la quantité du produit est supérieure à 1
+            if(product.quantity > 1) {
+                document.querySelector('.minus').removeAttribute('disabled');
+                document.querySelector('.minus').classList.remove('disabled');
             }
-            // Met à jour la quantité dans le local storage
-            localStorage.setItem("basket", JSON.stringify(basket));
-            // Met à jour le prix total du panier
-            localStorage.setItem('totalCost', basketCost + product.price);
-            // Recharge la page
-            window.location.reload();
-        }); 
-        // Supprime l'attribut et la classe "disabled" lorsque la quantité du produit est supérieure à 1
-        if(product.quantity > 1) {
-            document.querySelector('.minus').removeAttribute('disabled');
-            document.querySelector('.minus').classList.remove('disabled');
         }
 
-
         // Supprime un produit du panier
-        let removeButtons = document.querySelector('.removeButton');
-        removeButtons.addEventListener('click', function() {
-            let id = this.getAttribute("data-item");
-            
-            // Supprime le produit du panier si l'attribut "id" de la poubelle est identique à celui du produit
-            for (let i=0; i !=basket.length; i++){
-                if (basket[i].id === id){
-                    basket.splice(i,1);
-                    break;
+        let removeButtons = document.getElementsByClassName('removeButton');
+
+        for(let x=0; x < removeButtons.length; x++ ) {
+            removeButtons[x].addEventListener('click', function() {
+                let id = this.getAttribute("data-item");
+                
+                // Supprime le produit du panier si l'attribut "id" de la poubelle est identique à celui du produit
+                for (let i=0; i < basket.length; i++){
+                    if (basket[i].id === id){
+                        basket.splice(i,1);
+                        break;
+                    }
                 }
-            }
-            // Met à jour le panier dans le local storage
-            localStorage.setItem("basket", JSON.stringify(basket));
-            // Met à jour le prix total du panier
-            localStorage.setItem('totalCost', basketCost - (product.price*product.quantity));
-            // Recharge la page
-            window.location.reload();
-        });
+                // Met à jour le panier dans le local storage
+                localStorage.setItem("basket", JSON.stringify(basket));
+                // Met à jour le prix total du panier
+                localStorage.setItem('totalCost', basketCost - (product.price*product.quantity));
+                
+                // Recharge la page
+                window.location.reload();
+                console.log(basketCost);
+            });
+        }
     }
 }
 
+
  
-
-
 // Formulaire de commande
 const submitForm = document.getElementById('orderButton');
 

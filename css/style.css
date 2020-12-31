@@ -35,9 +35,21 @@ body {
   }
 }
 
+@media (max-width: 767px) { 
+  .basketContent {
+    display: none;
+  }
+  .price {
+    display: none;
+  }
+  .quantity {
+    padding: 2rem 0 2rem 0;
+  }
+}
+
 @media (max-width: 350px) { 
   .img-fluid {
-    max-height: 250px;
+    max-height: 150px;
   }
   .productImg {
     max-width: 250px;
