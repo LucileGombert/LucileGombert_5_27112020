@@ -1,7 +1,10 @@
-const params = new URLSearchParams(document.location.search);
+// Récupère le prix et l'identifiant de la commande
+const params = new URLSearchParams(window.location.search);
 
-let priceOrder = document.getElementById("priceOrder");
-priceOrder.textContent = params.get('price');
+// Affiche le prix de la commande
+const priceOrder = document.getElementById("priceOrder");
+priceOrder.innerHTML = params.get('price');
 
-let idOrder = document.getElementById("idOrder");
-idOrder.textContent = params.get('id');
+// Affiche l'identifiant de la commande
+const idOrder = document.getElementById("idOrder");
+idOrder.innerHTML = params.get('id');

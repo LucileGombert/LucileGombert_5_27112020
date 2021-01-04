@@ -1,5 +1,5 @@
 // Initialise les constantes - Récupère l'id d'un produit
-const params = new URLSearchParams(document.location.search);
+const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
 
 const product = document.getElementById('product');
@@ -142,5 +142,4 @@ function totalCost(product) {
     } else {
         localStorage.setItem('totalCost', product.price);
     }
-    console.log(basketCost);
 }
