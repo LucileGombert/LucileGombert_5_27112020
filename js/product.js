@@ -7,7 +7,7 @@ const product = document.getElementById('product');
 // Appelle l'API
 fetch('http://localhost:3000/api/cameras/' + id)
     
-// Récupère une réponse au format json
+    // Récupère une réponse au format json
     .then(function (response) {
         return response.json();
     })
@@ -16,6 +16,7 @@ fetch('http://localhost:3000/api/cameras/' + id)
     .then(function(item) {
         displayItem(item);
     });
+
 
 // Affiche le contenu de la carte produit dans le code HTMl
 function displayItem(product) {
@@ -36,8 +37,8 @@ function displayItem(product) {
     productDescDiv.setAttribute('class', 'col-sm-8 col-lg-6 m-0 pt-4');
 
     // Affiche le nom du produit    
-    const productName = document.createElement('h3');
-    productName.setAttribute('class', 'name card-title pt-2');
+    const productName = document.createElement('h1');
+    productName.setAttribute('class', 'name h3 card-title pt-2');
     productName.innerHTML = product.name;
     productDescDiv.appendChild(productName);
 
@@ -87,6 +88,7 @@ function displayItem(product) {
     });
 }
 
+
 // Ajoute les articles au panier
 function addToCart(product) {
 
@@ -102,8 +104,6 @@ function addToCart(product) {
             price: product.price,
             quantity: 1,
         }); 
-
-        // Met à jour le panier
         localStorage.setItem('basket', JSON.stringify(products)); 
     } else {
         products =  JSON.parse(localStorage.getItem('basket'))
@@ -127,19 +127,24 @@ function addToCart(product) {
                 quantity: 1,
             }); 
         }
+
+        // Met à jour le panier
         localStorage.setItem('basket', JSON.stringify(products));
     }        
 }
+
 
 // Calcule le prix total du panier
 function totalCost(product) {
     let basketCost = localStorage.getItem('totalCost');
     
+    // Si le prix total du panier n'est pas nul, ajoute le prix du produit à celui du panier
     if(basketCost != null) {
         basketCost = parseInt(basketCost);
         localStorage.setItem('totalCost', basketCost + product.price);
         
     } else {
+        // Sinon le prix total du panier correspond au prix du produit
         localStorage.setItem('totalCost', product.price);
     }
 }

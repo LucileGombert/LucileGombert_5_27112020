@@ -4,7 +4,7 @@ const products = document.getElementById('products');
 // Appelle l'API
 fetch('http://localhost:3000/api/cameras')
     
-// Récupère une réponse au format json
+    // Récupère une réponse au format json
     .then(function(response) {
         return response.json();
     })
@@ -14,6 +14,7 @@ fetch('http://localhost:3000/api/cameras')
         displayItems(items);
     });
 
+    
 // Affiche le contenu de chaque carte produit dans le code HTMl
 function displayItems(products) {
     products.forEach(product => {
