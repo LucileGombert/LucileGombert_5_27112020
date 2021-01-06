@@ -96,7 +96,7 @@ function displayBasketItems() {
 
 
 // Supprime un produit du panier
-function remoteItem() {
+function removeItem() {
     // Récupère le bouton poubelle
     let removeButton = document.querySelectorAll('.removeButton');
     let product = JSON.parse(localStorage.getItem('basket'));
@@ -298,6 +298,6 @@ function validateOrder() {
 
 displayPageBasket();
 displayBasketItems();
-remoteItem();
+removeItem();
 checkInputs();
 validateOrder();
