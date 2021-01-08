@@ -132,7 +132,7 @@ function checkInputs() {
         const lastName = document.getElementById('lastName');
         const lastNameMissing = document.getElementById('lastNameMissing');
         // Vérifie que le nom comporte seulement les caractères attendus
-        const lastNameValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/i;
+        const lastNameValidation = /^[a-zA-ZéèêàçîïÉÈÎÏ]{2,}([-'\s][a-zA-ZéèêàçîïÉÈÎÏ]{2,})?/;
 
         // Si le champ "Nom" est vide ou s'il ne respecte pas la regex, un message d'erreur s'affiche et bloque l'envoi du formulaire
         if (lastName.validity.valueMissing) {
@@ -150,7 +150,7 @@ function checkInputs() {
         const firstName = document.getElementById('firstName');
         const firstNameMissing = document.getElementById('firstNameMissing');
         // Vérifie que le prénom comporte seulement les caractères attendus
-        const firstNameValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/i;
+        const firstNameValidation = /^[a-zA-ZéèêàçîïÉÈÎÏ]{2,}([-'\s][a-zA-ZéèêàçîïÉÈÎÏ]{2,})?/;
         
         // Si le champ "Prénom" est vide ou s'il ne respecte pas la regex, un message d'erreur s'affiche et bloque l'envoi du formulaire
         if (firstName.validity.valueMissing) {
@@ -186,8 +186,8 @@ function checkInputs() {
         const address = document.getElementById('address');
         const addressMissing = document.getElementById('addressMissing');
         // Vérifie que l'adresse comporte seulement les caractères attendus
-        const adressValidation = /^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)*/i;
-
+        const adressValidation = /^[0-9]{0,10}[-'\s]*[a-zA-Zàâäéèêëïîôöùûüç]{2,}/;
+    
         // Si le champ "Adresse" est vide ou s'il ne respecte pas la regex, un message d'erreur s'affiche et bloque l'envoi du formulaire
         if (address.validity.valueMissing) {
             e.preventDefault();
@@ -204,8 +204,8 @@ function checkInputs() {
         const zip = document.getElementById('zip');
         const zipMissing = document.getElementById('zipMissing');
         // Vérifie que le code postal comporte seulement les caractères attendus
-        const zipValidation = /^((0[1-9])|([1-8][0-9])|(9[0-8])|(2A)|(2B))[0-9]{3}$/;
-        
+        const zipValidation = /^[1-9]{1}[0-9]{4}/;
+
         // Si le champ "Code postal" est vide ou s'il ne respecte pas la regex, un message d'erreur s'affiche et bloque l'envoi du formulaire
         if (zip.validity.valueMissing) {
             e.preventDefault();
@@ -222,7 +222,7 @@ function checkInputs() {
         const city = document.getElementById('city');
         const cityMissing = document.getElementById('cityMissing');
         // Vérifie que la ville comporte seulement les caractères attendus
-        const cityValidation = /^[a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÉÈÎÏ][a-zéèêàçîï]+)?/i;
+        const cityValidation = /^[a-zA-ZéèêàçîïÉÈÎÏ]{2,}([-'\s][a-zA-ZéèêàçîïÉÈÎÏ]{2,})?/;
 
         // Si le champ "Ville" est vide ou s'il ne respecte pas la regex, un message d'erreur s'affiche et bloque l'envoi du formulaire
         if (city.validity.valueMissing) {
@@ -288,7 +288,7 @@ function validateOrder() {
 
             // Affiche le résultat sur la page "orderConfirmation.html"
             .then(function(result) {
-                window.location.href = `orderConfirmation.html?id=${result.orderId}&price=${totalCost /100 + ',00 €'}`
+                window.location.href = `orderConfirmation.html?price=${totalCost /100 + ',00 €'}&id=${result.orderId}`
             });
         // Vide le local storage
         localStorage.clear() 

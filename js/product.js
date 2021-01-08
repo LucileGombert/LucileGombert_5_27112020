@@ -69,7 +69,7 @@ function displayItem(product) {
         productLensesSelect.appendChild(optionLenses);
     }
   
-    // Affiche la description du produit
+    // Affiche le prix du produit
     const productPrice = document.createElement('p');
     productPrice.setAttribute('class', 'price pt-4');
     productPrice.innerHTML = product.price /100 + ',00 €';
