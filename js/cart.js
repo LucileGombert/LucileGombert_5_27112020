@@ -57,7 +57,7 @@ function displayBasketItems() {
 
             // Affiche le prix du produit 
             const basketProductPrice = document.createElement('p');
-            basketProductPrice.setAttribute('class', 'price col-12 col-md-2 m-0 text-center');
+            basketProductPrice.setAttribute('class', 'productPrice col-12 col-md-2 m-0 text-center');
             basketProductPrice.innerHTML = product.price /100 + ',00 €';
             basketItem.appendChild(basketProductPrice);
             
