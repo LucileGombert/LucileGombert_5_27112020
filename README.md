@@ -17,4 +17,6 @@ Orinoco
 <br>▹ Clonez le [backend](https://github.com/OpenClassrooms-Student-Center/JWDP5) du projet ;
 <br>▹ A partir du dossier backend, exécutez `npm install` ;
 <br>▹ Démarrez ensuite le serveur en exécutant `node server` ;
-<br>▹ Le serveur doit fonctionner sur `localhost` avec le port par défaut `3000`.
+<br>▹ Le serveur doit fonctionner sur `localhost` avec le port par défaut `3000` ;
+<br>
+<br>▹ Clonez ce repository.
